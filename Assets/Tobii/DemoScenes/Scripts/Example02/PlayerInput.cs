@@ -23,6 +23,7 @@ public class ReactOnUserInput : MonoBehaviour
 	private float _waitingTime = 0.1f;
 	private float _timeSinceButtonPressed = 0;
 	private bool _useBlobEffect = false;
+    private float _timer = 2;
 
 	/// <summary>
 	/// Store the start scale of the object
@@ -47,15 +48,21 @@ public class ReactOnUserInput : MonoBehaviour
 	/// </summary>
 	void Update()
 	{
-
 		if (_gazeAware.HasGazeFocus)
 		{
-			if (Input.GetButtonDown(_buttonName))
-			{
-				_timeSinceButtonPressed = 0;
-				StartCoroutine(StartScaleEffect());
-			}
+            this._timer -= Time.deltaTime;
 		}
+        else
+        {
+            this._timer = 2;
+        }
+
+        if (this._timer <= 0)
+        {
+            this.gameObject.SetActive(false);   
+        }
+
+        Debug.Log(this._timer);
 
 		if (_useBlobEffect)
 		{
