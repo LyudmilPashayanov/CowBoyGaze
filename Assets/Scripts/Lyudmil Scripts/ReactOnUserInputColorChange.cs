@@ -4,6 +4,8 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 using Tobii.Gaming;
 
 /// <summary>
@@ -13,7 +15,7 @@ using Tobii.Gaming;
 /// <remarks>
 /// Referenced by the Target game objects in the Simple Gaze Selection example scene.
 /// </remarks>
-public class ReactOnUserInput : MonoBehaviour
+public class ReactOnUserInputColorChange : MonoBehaviour
 {
 	public AnimationCurve blendingCurve;
 
@@ -23,7 +25,10 @@ public class ReactOnUserInput : MonoBehaviour
 	private float _waitingTime = 0.1f;
 	private float _timeSinceButtonPressed = 0;
 	private bool _useBlobEffect = false;
-
+    float timerColorChange = 1.5f;
+    public float timerDestroy = 1.5f;
+    static List<bool> allgreen = new List<bool>();
+    public Color defaultColor;
 	/// <summary>
 	/// Store the start scale of the object
 	/// </summary>
@@ -31,6 +36,7 @@ public class ReactOnUserInput : MonoBehaviour
 	{
 		_startScale = transform.localScale;
 		_gazeAware = GetComponent<GazeAware>();
+        gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
 	}
 
 	/// <summary>
@@ -47,17 +53,38 @@ public class ReactOnUserInput : MonoBehaviour
 	/// </summary>
 	void Update()
 	{
-
 		if (_gazeAware.HasGazeFocus)
 		{
-			if (Input.GetButtonDown(_buttonName))
-			{
-				_timeSinceButtonPressed = 0;
-				StartCoroutine(StartScaleEffect());
-			}
-		}
-
-		if (_useBlobEffect)
+            timerColorChange -= Time.deltaTime;
+            if (timerColorChange == 1.0f)
+            {
+                this.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            }
+            if(timerColorChange <= 0.5f)
+            {
+                this.gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
+            }
+            if (timerColorChange <= 0f)
+            {
+                this.gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
+            }
+            if(timerColorChange <= -0.5f)
+            {
+                this.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                timerDestroy = 1.5f;
+                timerColorChange = 1.0f;
+            }
+            
+        }
+        if (this.gameObject.GetComponent<MeshRenderer>().material.color == Color.green)
+        {
+            timerDestroy -= Time.deltaTime;
+        }
+        if (timerDestroy <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+        if (_useBlobEffect)
 		{
 			float scaleFactor = blendingCurve.Evaluate(_timeSinceButtonPressed / _waitingTime);
 			_timeSinceButtonPressed += Time.deltaTime;
