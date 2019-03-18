@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TimerManager : MonoBehaviour
 {
@@ -17,7 +18,20 @@ public class TimerManager : MonoBehaviour
 	
 	void Update ()
     {
+        if (this._timer <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
         this._timer -= Time.deltaTime;
-        this.timerText.text = this._timer.ToString("F2");
+
+        if (this._timer <= 0)
+        {
+            this.timerText.text = 0.0f.ToString("F2");
+        }
+        else
+        {
+            this.timerText.text = this._timer.ToString("F2");
+        }
 	}
 }
