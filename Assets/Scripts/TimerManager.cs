@@ -6,32 +6,56 @@ using UnityEngine.SceneManagement;
 
 public class TimerManager : MonoBehaviour
 {
-    private float _timer;
+    private static float _timer;
+    private static bool _running = false;
 
-    public float timerDuration = 60;
+    public static float timerDuration = 60;
     public Text timerText;
 
 	void Start ()
     {
-        this._timer = timerDuration;
+        _timer = timerDuration;
 	}
 	
 	void Update ()
     {
-        if (this._timer <= 0)
+        if (_timer <= 0)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        this._timer -= Time.deltaTime;
+        if (_running)
+        {
+            _timer -= Time.deltaTime;
 
-        if (this._timer <= 0)
-        {
-            this.timerText.text = 0.0f.ToString("F2");
-        }
-        else
-        {
-            this.timerText.text = this._timer.ToString("F2");
+            if (_timer <= 0)
+            {
+                this.timerText.text = 0.0f.ToString("F2");
+            }
+            else
+            {
+                this.timerText.text = _timer.ToString("F2");
+            }
         }
 	}
+
+    public static void StartTimer()
+    {
+        _running = true;
+    }
+
+    public static void StopTimer()
+    {
+        _running = false;
+    }
+
+    public static void ResetTimer()
+    {
+        _timer = timerDuration;
+    }
+
+    public static void SetTimerDuration(float duration)
+    {
+        timerDuration = duration;
+    }
 }
