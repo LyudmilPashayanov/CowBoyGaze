@@ -19,6 +19,7 @@ public class ReactOnUserInputColorChange : MonoBehaviour
 {
 	public AnimationCurve blendingCurve;
 
+    private GameObject _parent;
 	private Vector3 _startScale;
 	private GazeAware _gazeAware;
 	private string _buttonName = "Fire1";
@@ -28,7 +29,9 @@ public class ReactOnUserInputColorChange : MonoBehaviour
     float timerColorChange = 1.5f;
     public float timerDestroy = 1.5f;
     static List<bool> allgreen = new List<bool>();
+    private int placeInList;
     public Color defaultColor;
+    public GameObject movingPuzzle;
 	/// <summary>
 	/// Store the start scale of the object
 	/// </summary>
@@ -37,6 +40,9 @@ public class ReactOnUserInputColorChange : MonoBehaviour
 		_startScale = transform.localScale;
 		_gazeAware = GetComponent<GazeAware>();
         gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
+
+        allgreen.Add(false);
+        this.placeInList = allgreen.Count - 1;
 	}
 
 	/// <summary>
@@ -76,14 +82,23 @@ public class ReactOnUserInputColorChange : MonoBehaviour
             }
             
         }
+
         if (this.gameObject.GetComponent<MeshRenderer>().material.color == Color.green)
+        {
+            allgreen[this.placeInList] = true;
+        }
+        
+        if (AllCubesGreen())
         {
             timerDestroy -= Time.deltaTime;
         }
+
         if (timerDestroy <= 0)
         {
             Destroy(this.gameObject);
+            this.movingPuzzle.SetActive(true);
         }
+
         if (_useBlobEffect)
 		{
 			float scaleFactor = blendingCurve.Evaluate(_timeSinceButtonPressed / _waitingTime);
@@ -98,4 +113,17 @@ public class ReactOnUserInputColorChange : MonoBehaviour
 		yield return new WaitForSeconds(_waitingTime);
 		_useBlobEffect = false;
 	}
+
+    public static bool AllCubesGreen()
+    {
+        foreach (bool b in allgreen)
+        {
+            if (!b)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

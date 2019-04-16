@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestinationReacherScript : MonoBehaviour {
-
+public class DestinationReacherScript : MonoBehaviour
+{
     public GameObject MovingObject;
     public GameObject destinationArrow;
+    public GameObject lookAwayPuzzle;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "ActivationCollider")
@@ -18,6 +20,9 @@ public class DestinationReacherScript : MonoBehaviour {
                 MovingObject.transform.GetChild(i).gameObject.SetActive(false);
                 destinationArrow.SetActive(false);
             }
+
+            this.lookAwayPuzzle.SetActive(true);
+            this.transform.parent.gameObject.SetActive(false);
         }
     }
 }
