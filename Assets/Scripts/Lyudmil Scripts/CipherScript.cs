@@ -26,7 +26,8 @@ public class CipherScript : MonoBehaviour
     private float _waitingTime = 0.1f;
     private float _timeSinceButtonPressed = 0;
     private bool _useBlobEffect = false;
-     public List<Button> CipherButtons = new List<Button>();
+    public List<GameObject> Digits = new List<GameObject>();
+    List<GameObject> chosenDigits = new List<GameObject>();
     public GameObject greenDigit;
     public GameObject redDigit;
     public GameObject orangeDigit;
@@ -43,11 +44,15 @@ public class CipherScript : MonoBehaviour
     public bool secondRight = false;
     public bool ThirdRight = false;
     public bool FourthRight = false;
-    public bool Fifthight = false;
-
-    float startTime;
-    public float speed = 1.0f;
-
+    public bool FifthRight = false;
+    public bool counterStop = false;
+    public int counter=0;
+    public float overallTime = 0f;
+    public bool gameOn = true;
+    public float peripheralScore = 10;
+    public float logicalScore = 10;
+    public bool startOnce = true;
+    public float lookingTimer = 0;
     /// <summary>
     /// Store the start scale of the object
     /// </summary>
@@ -55,9 +60,19 @@ public class CipherScript : MonoBehaviour
     {
         _startScale = transform.localScale;
         _gazeAware = GetComponent<GazeAware>();
-        startTime = Time.time;
+        Randomize();
     }
-
+    public void Randomize()
+    {
+        List<GameObject> temp = Digits;
+        for (int i = 0; i <= 5; i++)
+        {
+            int index = UnityEngine.Random.Range(0, temp.Count - 1);
+            chosenDigits.Add(temp[index]);
+            temp.Remove(temp[index]);
+        }
+        
+    }
     /// <summary>
     /// Reset the component when it gets disabled
     /// </summary>
@@ -72,43 +87,37 @@ public class CipherScript : MonoBehaviour
     /// </summary>
     void Update()
     {
-        float t = (Time.time - startTime) * speed;
-        if (firstDigit.text == "7")
+        if (gameOn)
         {
-            firstRight = true;
+            overallTime += Time.deltaTime;
+            CheckNumbers();
         }
-        if(secondDigit.text == "3")
-        {
-            secondRight = true;
-        }
-        if(thirdDigit.text == "4")
-        {
-            ThirdRight = true;
-        }
-        if (fourthDigit.text == "0")
-        {
-            FourthRight = true;
-        }
-        if (FifthDigit.text == "2")
-        {
-            Fifthight = true;
-        }
-        if (firstRight == true && secondRight == true && ThirdRight == true && FourthRight == true && Fifthight == true)
-        {
-            Debug.Log("Game Won Congratulations");
-        }
+        
         if (_gazeAware.HasGazeFocus)
         {
             //foreach (Button button in CipherButtons)
             //{
             //    button.interactable = true;
             //}
-            
-            redDigit.GetComponent<Text>().color = Color.red;
-            orangeDigit.GetComponent<Text>().color =new Color(255, 144, 6, 255);
-            greenDigit.GetComponent<Text>().color = Color.green;
-            blueDigit.GetComponent<Text>().color = Color.blue;
-            yellowDigit.GetComponent<Text>().color = Color.yellow;
+            if (startOnce)
+            {
+                gameOn = true;
+                startOnce = false;
+            }
+            if (gameOn)
+            {
+                lookingTimer += Time.deltaTime;
+                if (counterStop)
+                {
+                    counter++;
+                    counterStop = false;
+                }
+            }
+            chosenDigits[0].GetComponent<Text>().color =  Color.green;
+            chosenDigits[1].GetComponent<Text>().color = Color.yellow; 
+            chosenDigits[2].GetComponent<Text>().color = Color.red;
+            chosenDigits[3].GetComponent<Text>().color = new Color(255, 144, 6, 255);
+            chosenDigits[4].GetComponent<Text>().color =  Color.blue;
         }
         else
         {
@@ -116,11 +125,12 @@ public class CipherScript : MonoBehaviour
             //{
             //    button.interactable = true;
             //}
-             redDigit.GetComponent<Text>().color = Color.black;
-            orangeDigit.GetComponent<Text>().color = Color.black;
-            greenDigit.GetComponent<Text>().color = Color.black;
-            blueDigit.GetComponent<Text>().color = Color.black;
-            yellowDigit.GetComponent<Text>().color = Color.black;
+            counterStop = true;
+            chosenDigits[0].GetComponent<Text>().color = Color.black;
+            chosenDigits[1].GetComponent<Text>().color = Color.black;
+            chosenDigits[2].GetComponent<Text>().color = Color.black;
+            chosenDigits[3].GetComponent<Text>().color = Color.black;
+            chosenDigits[4].GetComponent<Text>().color = Color.black;
         }
         if (_useBlobEffect)
         {
@@ -128,6 +138,98 @@ public class CipherScript : MonoBehaviour
             _timeSinceButtonPressed += Time.deltaTime;
             transform.localScale = _startScale + _startScale * scaleFactor;
         }
+    }
+
+    public void CheckNumbers()
+    {
+        if (firstDigit.text == chosenDigits[0].GetComponent<Text>().text)
+        {
+            Debug.Log("chosen digit[0] text is " + chosenDigits[0].GetComponent<Text>().text);
+            firstRight = true;
+        }
+        else
+        {
+            firstRight = false;
+        }
+        if (secondDigit.text == chosenDigits[1].GetComponent<Text>().text)
+        {
+            secondRight = true;
+        }
+        else
+        {
+            secondRight = false;
+        }
+        if (thirdDigit.text == chosenDigits[2].GetComponent<Text>().text)
+        {
+            ThirdRight = true;
+        }
+        else
+        {
+            ThirdRight = false;
+        }
+        if (fourthDigit.text == chosenDigits[3].GetComponent<Text>().text)
+        {
+            FourthRight = true;
+        }
+        else
+        {
+            FourthRight = false;
+        }
+        if (FifthDigit.text == chosenDigits[4].GetComponent<Text>().text)
+        {
+            FifthRight = true;
+        }
+        else
+        {
+            FifthRight = false;
+        }
+        if (firstRight == true && secondRight == true && ThirdRight == true && FourthRight == true && FifthRight == true)
+        {
+            gameOn = false;
+            Debug.Log("game won");
+            Debug.Log("peripheral score = " + getPeripheralScore());
+            Debug.Log("logical score = " + getLogicalScore().ToString());
+          
+        }
+    }
+    public float getPeripheralScore()
+    {
+        if(counter < 3)
+        {
+            for (float i = 0; i < lookingTimer-3; i = +0.3f) // calculates the score based on how much time you spend                                                           
+            {                                                // looking at the unlocker.
+                peripheralScore = peripheralScore - 0.1f;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < counter-3; i++)
+            {
+                peripheralScore = peripheralScore -0.6f;
+            }
+            for (float i = 0; i < lookingTimer;)
+            {
+                peripheralScore = peripheralScore - 0.1f;
+                i= i + 0.3f;
+            }
+        }
+        return peripheralScore;
+    }
+    public float getLogicalScore()
+    {
+        if (overallTime < 10)
+        {
+            logicalScore = 10;
+        }
+        else
+        {
+            for (float i = 0; i < overallTime-10;)
+            {
+                logicalScore = logicalScore - 0.2f; // takes out ~ 0.6 ~ points for each second after the 10th second.
+                i = i + 0.3f;
+            }
+        }
+        return logicalScore;
     }
 
     IEnumerator StartScaleEffect()

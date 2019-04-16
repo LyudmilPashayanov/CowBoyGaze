@@ -8,10 +8,7 @@ public class DigitChange : MonoBehaviour {
 
     public Text currentDigitText;
     private int currentDigit =0;
-	void Start () {
 
-	}
-	
 	// Update is called once per frame
 	void Update () {
         currentDigit = Convert.ToInt32(currentDigitText.text);
