@@ -53,6 +53,9 @@ public class CipherScript : MonoBehaviour
     public float logicalScore = 10;
     public bool startOnce = true;
     public float lookingTimer = 0;
+    public GameObject resultPanel;
+    public Text peripheralText;
+    public Text logicalText;
     /// <summary>
     /// Store the start scale of the object
     /// </summary>
@@ -187,9 +190,10 @@ public class CipherScript : MonoBehaviour
         {
             gameOn = false;
             Debug.Log("game won");
-            Debug.Log("peripheral score = " + getPeripheralScore());
-            Debug.Log("logical score = " + getLogicalScore().ToString());
-          
+            resultPanel.SetActive(true);
+            gameObject.GetComponent<BoxCollider>().enabled = false;
+            peripheralText.text = "Peripheral sight skills: " + getPeripheralScore().ToString("F1") + "/10";
+            logicalText.text = "Logical skills: "+ getLogicalScore().ToString("F1") + "/10";          
         }
     }
     public float getPeripheralScore()

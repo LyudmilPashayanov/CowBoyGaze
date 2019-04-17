@@ -18,32 +18,36 @@ using Tobii.Gaming;
 public class ReactOnUserInputColorChange : MonoBehaviour
 {
 	public AnimationCurve blendingCurve;
-
-    private GameObject _parent;
 	private Vector3 _startScale;
 	private GazeAware _gazeAware;
-	private string _buttonName = "Fire1";
 	private float _waitingTime = 0.1f;
 	private float _timeSinceButtonPressed = 0;
 	private bool _useBlobEffect = false;
-    float timerColorChange = 1.5f;
+   public float timerColorChange = 1.5f;
     public float timerDestroy = 1.5f;
-    static List<bool> allgreen = new List<bool>();
-    private int placeInList;
     public Color defaultColor;
-    public GameObject movingPuzzle;
-	/// <summary>
-	/// Store the start scale of the object
-	/// </summary>
-	void Start()
-	{
-		_startScale = transform.localScale;
-		_gazeAware = GetComponent<GazeAware>();
-        gameObject.GetComponent<MeshRenderer>().material.color = defaultColor;
-
-        allgreen.Add(false);
-        this.placeInList = allgreen.Count - 1;
-	}
+    public bool destroy = false;
+    public bool green = false;
+    static float rapidMovementScore = 10;
+   
+    bool reduceOnce =true;
+    /// <summary>
+    /// Store the start scale of the object
+    /// </summary>
+    void Start()
+    {
+        _startScale = transform.localScale;
+        _gazeAware = GetComponent<GazeAware>();
+        ChangeColorWings(defaultColor);
+    }
+    public void ChangeColorWings(Color color)
+    {
+        foreach (Transform item in transform)
+        {
+            if (item.name != "body")
+                item.GetComponent<MeshRenderer>().material.color = color;
+        }
+    }
 
 	/// <summary>
 	/// Reset the component when it gets disabled
@@ -59,46 +63,23 @@ public class ReactOnUserInputColorChange : MonoBehaviour
 	/// </summary>
 	void Update()
 	{
-		if (_gazeAware.HasGazeFocus)
-		{
-            timerColorChange -= Time.deltaTime;
-            if (timerColorChange == 1.0f)
-            {
-                this.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            }
-            if(timerColorChange <= 0.5f)
-            {
-                this.gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
-            }
-            if (timerColorChange <= 0f)
-            {
-                this.gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
-            }
-            if(timerColorChange <= -0.5f)
-            {
-                this.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                timerDestroy = 1.5f;
-                timerColorChange = 1.0f;
-            }
-            
+        if (_gazeAware.HasGazeFocus)
+        {        
+            IterateColors();
+            startWings();
         }
-
-        if (this.gameObject.GetComponent<MeshRenderer>().material.color == Color.green)
+        else
         {
-            allgreen[this.placeInList] = true;
+            stopWings();
         }
-        
-        if (AllCubesGreen())
+        if (green)
         {
             timerDestroy -= Time.deltaTime;
+            if (timerDestroy <= 0)
+            {
+                destroy = true;
+            }
         }
-
-        if (timerDestroy <= 0)
-        {
-            Destroy(this.gameObject);
-            this.movingPuzzle.SetActive(true);
-        }
-
         if (_useBlobEffect)
 		{
 			float scaleFactor = blendingCurve.Evaluate(_timeSinceButtonPressed / _waitingTime);
@@ -106,24 +87,73 @@ public class ReactOnUserInputColorChange : MonoBehaviour
 			transform.localScale = _startScale + _startScale * scaleFactor;
 		}
 	}
+    public void IterateColors()
+    {
+        timerColorChange -= Time.deltaTime;
+        if (timerColorChange == 1.0f)
+        {
+            reduceOnce = true;
+            ChangeColorWings(Color.red);
+        }
+        if (timerColorChange <= 0.5f)
+        {
+            ChangeColorWings(Color.blue);
+        }
+        if (timerColorChange <= 0f)
+        {
+            ChangeColorWings(Color.green);
+            green = true;
+        }
+        if (timerColorChange <= -0.5f)
+        {
+            green = false;
+            destroy = false;
+            ChangeColorWings(Color.red);
+            timerDestroy = 1.5f;
+            timerColorChange = 1.0f;
+            if (reduceOnce)
+            {
+                reduceOnce = false;
+                if (rapidMovementScore > 0)
+                {
+                    rapidMovementScore = rapidMovementScore - 0.4f;
+                }
+                else
+                {
+                    rapidMovementScore = 0;
+                }
+            }
+        }
+    }
+    public void startWings()
+    {
+        foreach (Transform item in transform)
+        {
+            if(item.name != "body")
+            {
+                item.GetComponent<Animator>().enabled = true;
+            }
+        }
+    }
+    public void stopWings()
+    {
+        foreach (Transform item in transform)
+        {
+            if (item.name != "body")
+            {
+                item.GetComponent<Animator>().enabled = false;
+            }
+        }
+    }
+    public float getScore()
+    {
+        return rapidMovementScore;
+    }
 
-	IEnumerator StartScaleEffect()
+    IEnumerator StartScaleEffect()
 	{
 		_useBlobEffect = true;
 		yield return new WaitForSeconds(_waitingTime);
 		_useBlobEffect = false;
 	}
-
-    public static bool AllCubesGreen()
-    {
-        foreach (bool b in allgreen)
-        {
-            if (!b)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }
