@@ -7,23 +7,9 @@ public class ManagerController : MonoBehaviour
     public List<GameObject> puzzles;
     public GameObject menu;
 
-    private float counter = 4;
-
     void Start()
     {
         this.BackToMenu();
-    }
-
-    void Update()
-    {
-        this.counter -= Time.deltaTime;
-        Debug.Log(this.counter);
-        if (this.counter <= 0)
-        {
-            this.StartPuzzle(this.puzzles[2]);
-
-            this.counter = 100;
-        }
     }
 
     public void BackToMenu()

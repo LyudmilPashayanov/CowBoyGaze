@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 33164148669684860}
   - component: {fileID: 23702560461429590}
   - component: {fileID: 114846321272745736}
+  - component: {fileID: 114148403404963502}
+  - component: {fileID: 65766058806526468}
   m_Layer: 0
   m_Name: MenuItem
   m_TagString: Untagged
@@ -150,6 +152,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1139956350773316}
   m_Mesh: {fileID: 4300000, guid: 3b83c8d975e40cc43b5c6487b68b192b, type: 3}
+--- !u!65 &65766058806526468
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1139956350773316}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.06349084, y: 0.021543385, z: 0.038972173}
+  m_Center: {x: -0.018079055, y: 4.776918e-10, z: 0.006458839}
 --- !u!102 &102924497252185900
 TextMesh:
   serializedVersion: 3
@@ -171,6 +185,17 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4285887999
+--- !u!114 &114148403404963502
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1139956350773316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d87d489c55fc504987b709bbe1e4ec5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114846321272745736
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -182,3 +207,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2a393d3dd49b884ea37d2cf0c298537, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  puzzle: {fileID: 0}
