@@ -12,18 +12,24 @@ public class DestinationReacherScript : MonoBehaviour
     public GameObject canvas;
     public Text preciseText;
     public ReactOnUserInputMovement script;
-    public ManagerController manager;
+    private GameObject manager;
+
+    void Start()
+    {
+        this.manager = GameObject.Find("Manager");
+    }
+
     private void Update()
     {
         if (canvas.activeSelf == true)
         {
             if (script.getPreciseScore() > 10) {
-                manager.getPrecise(10f);
+                manager.GetComponent<ManagerController>().getPrecise(10f);
                 preciseText.text = "Eye precision: 10/10";
             }
             else
             {
-                manager.getPrecise(script.getPreciseScore());
+                manager.GetComponent<ManagerController>().getPrecise(script.getPreciseScore());
                 preciseText.text = "Eye precision: " + script.getPreciseScore().ToString("F1") + "/10";
             }       
         }  

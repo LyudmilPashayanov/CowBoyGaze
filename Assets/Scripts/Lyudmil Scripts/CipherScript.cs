@@ -56,7 +56,7 @@ public class CipherScript : MonoBehaviour
     public GameObject resultPanel;
     public Text peripheralText;
     public Text logicalText;
-    public ManagerController manager;
+    private GameObject manager;
     bool once = true;
     float menuTimer = 0;
     /// <summary>
@@ -67,6 +67,7 @@ public class CipherScript : MonoBehaviour
         _startScale = transform.localScale;
         _gazeAware = GetComponent<GazeAware>();
         Randomize();
+        this.manager = GameObject.Find("Manager");
     }
     public void Randomize()
     {
@@ -106,7 +107,7 @@ public class CipherScript : MonoBehaviour
                 if (once)
                 {
                     once = false;
-                    manager.BackToMenu();
+                    manager.GetComponent<ManagerController>().BackToMenu();
                 }
                 
             }
@@ -201,9 +202,9 @@ public class CipherScript : MonoBehaviour
             gameObject.GetComponent<BoxCollider>().enabled = false;
             float tempPeripheral = getPeripheralScore();
             peripheralText.text = "Peripheral sight skills: " + tempPeripheral.ToString("F1") + "/10";
-            manager.getPeripheral(tempPeripheral);
+            manager.GetComponent<ManagerController>().getPeripheral(tempPeripheral);
             logicalText.text = "Logical skills: "+ getLogicalScore().ToString("F1") + "/10";
-            manager.getLogical(logicalScore);
+            manager.GetComponent<ManagerController>().getLogical(logicalScore);
         }
     }
     public float getPeripheralScore()

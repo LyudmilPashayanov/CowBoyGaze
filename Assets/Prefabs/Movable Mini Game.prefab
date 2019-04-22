@@ -566,7 +566,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1978957284288122
 GameObject:
   m_ObjectHideFlags: 1
@@ -2027,7 +2027,6 @@ MonoBehaviour:
   canvas: {fileID: 1591601303196406}
   preciseText: {fileID: 114607009195470058}
   script: {fileID: 114948996113887156}
-  manager: {fileID: 0}
 --- !u!114 &114221248333383680
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2047,7 +2046,6 @@ MonoBehaviour:
   canvas: {fileID: 1591601303196406}
   preciseText: {fileID: 114607009195470058}
   script: {fileID: 114940883716019182}
-  manager: {fileID: 0}
 --- !u!114 &114245878578102360
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2120,7 +2118,6 @@ MonoBehaviour:
   canvas: {fileID: 1591601303196406}
   preciseText: {fileID: 114607009195470058}
   script: {fileID: 114876961687433838}
-  manager: {fileID: 0}
 --- !u!114 &114439884766260408
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2470,7 +2467,6 @@ MonoBehaviour:
   canvas: {fileID: 1591601303196406}
   preciseText: {fileID: 114607009195470058}
   script: {fileID: 114500399191671312}
-  manager: {fileID: 0}
 --- !u!222 &222103416439430690
 CanvasRenderer:
   m_ObjectHideFlags: 1

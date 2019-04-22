@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 public class ManagerController : MonoBehaviour
 {
-    public List<GameObject> puzzles;
+    private GameObject _currentPuzzle;
+    private List<GameObject> puzzles;
     public GameObject menu;
     public float concentrationHS=0;
     public float peripheralHS=0;
@@ -16,24 +17,32 @@ public class ManagerController : MonoBehaviour
     public Text peripheralText;
     public Text rapidText;
     public Text concentrationText;
+
     void Start()
     {
-        BackToMenu();
+        this.puzzles = new List<GameObject>();
     }
+
     public void BackToMenu()
     {
-        foreach (GameObject gb in puzzles)
+        /*foreach (GameObject puzzle in this.puzzles)
         {
-             gb.SetActive(false);
-        }
+            Destroy(puzzle);
+        }*/
+
+        Destroy(this._currentPuzzle);
+
         menu.gameObject.SetActive(true);      
     }
+
     public void StartPuzzle(GameObject puzzle)
     {
-        puzzle.SetActive(true);
+        Instantiate(puzzle);
         this.menu.SetActive(false);
+        this._currentPuzzle = GameObject.Find(puzzle.name + "(Clone)");
     }
-   public void getLogical(float logical)
+
+    public void getLogical(float logical)
     {
         if (logical > logicalHS)
         {
@@ -47,6 +56,7 @@ public class ManagerController : MonoBehaviour
         //    return "score: " + logical;
         //}
     }
+
     public void getPeripheral(float peripheral)
     {
         if (peripheral > peripheralHS)

@@ -12,10 +12,16 @@ public class ConcetrationScoreScript : MonoBehaviour {
     public GameObject canvas;
     public Text concentrationText;
     bool once =true;
-    public ManagerController manager;
+    public GameObject manager;
     float menuTimer = 0;
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+
+    void Start()
+    {
+        this.manager = GameObject.Find("Manager");
+    }
+
+    void Update () {
 
         if (canvas.activeSelf == false)
         {
@@ -26,14 +32,14 @@ public class ConcetrationScoreScript : MonoBehaviour {
             menuTimer += Time.deltaTime;
             if(menuTimer > 5)
             {
-                manager.BackToMenu();
+                manager.GetComponent<ManagerController>().BackToMenu();
             }
             if (once)
             {
                 
                 once = false;
                 float temp = getConcentrationScore();
-                manager.getConcentration(temp);
+                manager.GetComponent<ManagerController>().getConcentration(temp);
                 concentrationText.text = "Eye Concentration: " + temp.ToString("F2") + "/10";
             }
             
