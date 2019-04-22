@@ -31,7 +31,8 @@ public class ReactOnUserInputMovement : MonoBehaviour
     public Color defaultColor;
     public bool side; // if true = right side / if false = left side
     public GameObject parent;
-    
+    static float preciseScore = 14;
+    bool takeOnce = false;
     /// <summary>
     /// Store the start scale of the object
     /// </summary>
@@ -56,7 +57,6 @@ public class ReactOnUserInputMovement : MonoBehaviour
     /// </summary>
     void Update()
     {
-        
         if (_gazeAware.HasGazeFocus)
         {
             if(side == true)
@@ -69,7 +69,15 @@ public class ReactOnUserInputMovement : MonoBehaviour
                 parent.transform.Translate(new Vector3(-2, 0, 0) * Time.deltaTime);
 
             }
-
+            takeOnce = true;
+        }
+        else
+        {
+            if (takeOnce)
+            {
+                preciseScore = preciseScore - 0.4f;
+                takeOnce = false;                
+            }
         }
         if (_useBlobEffect)
         {
@@ -78,7 +86,10 @@ public class ReactOnUserInputMovement : MonoBehaviour
             transform.localScale = _startScale + _startScale * scaleFactor;
         }
     }
-
+    public float getPreciseScore()
+    {
+        return preciseScore;
+    }
     IEnumerator StartScaleEffect()
     {
         _useBlobEffect = true;

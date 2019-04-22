@@ -56,6 +56,9 @@ public class CipherScript : MonoBehaviour
     public GameObject resultPanel;
     public Text peripheralText;
     public Text logicalText;
+    public ManagerController manager;
+    bool once = true;
+    float menuTimer = 0;
     /// <summary>
     /// Store the start scale of the object
     /// </summary>
@@ -95,13 +98,21 @@ public class CipherScript : MonoBehaviour
             overallTime += Time.deltaTime;
             CheckNumbers();
         }
-        
+        else
+        {
+            menuTimer += Time.deltaTime;
+            if(menuTimer > 5)
+            {
+                if (once)
+                {
+                    once = false;
+                    manager.BackToMenu();
+                }
+                
+            }
+        }
         if (_gazeAware.HasGazeFocus)
         {
-            //foreach (Button button in CipherButtons)
-            //{
-            //    button.interactable = true;
-            //}
             if (startOnce)
             {
                 gameOn = true;
@@ -124,10 +135,6 @@ public class CipherScript : MonoBehaviour
         }
         else
         {
-            //foreach (Button button in CipherButtons)
-            //{
-            //    button.interactable = true;
-            //}
             counterStop = true;
             chosenDigits[0].GetComponent<Text>().color = Color.black;
             chosenDigits[1].GetComponent<Text>().color = Color.black;
@@ -192,8 +199,11 @@ public class CipherScript : MonoBehaviour
             Debug.Log("game won");
             resultPanel.SetActive(true);
             gameObject.GetComponent<BoxCollider>().enabled = false;
-            peripheralText.text = "Peripheral sight skills: " + getPeripheralScore().ToString("F1") + "/10";
-            logicalText.text = "Logical skills: "+ getLogicalScore().ToString("F1") + "/10";          
+            float tempPeripheral = getPeripheralScore();
+            peripheralText.text = "Peripheral sight skills: " + tempPeripheral.ToString("F1") + "/10";
+            manager.getPeripheral(tempPeripheral);
+            logicalText.text = "Logical skills: "+ getLogicalScore().ToString("F1") + "/10";
+            manager.getLogical(logicalScore);
         }
     }
     public float getPeripheralScore()

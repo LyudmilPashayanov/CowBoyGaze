@@ -12,11 +12,21 @@ public class DestroyAllColorChange : MonoBehaviour {
     public Text concentrationText;
     public float overallTime = 0;
     public bool gameOver = false;
+    public ManagerController manager;
+    float menuTimer = 0;
     void Update () {
         if(!gameOver)
         {
             overallTime += Time.deltaTime;
             checkAll();
+        }
+        else
+        {
+            menuTimer += Time.deltaTime;
+            if (menuTimer > 5)
+            {
+                manager.BackToMenu();
+            }
         }
         getAllChildren();
         
@@ -36,7 +46,6 @@ public class DestroyAllColorChange : MonoBehaviour {
         {
             if (item == false)
             {
-                Debug.Log("NO");
                 return;
             }
         }
@@ -61,12 +70,14 @@ public class DestroyAllColorChange : MonoBehaviour {
         if (scoreScript.getScore() == 10)
         {
             rapidText.text = "Rapid Eye Movement skills: 10/10";
+            manager.getRapid(10f);
         }
         else
         {
             rapidText.text = "Rapid Eye Movement skills: " + scoreScript.getScore().ToString("F1") + "/10";
+            manager.getRapid(scoreScript.getScore());
         }
         concentrationText.text = "Eye Concentration skills: "+ concentrationScore.ToString("F1") +"/10";
-
+        manager.getConcentration(concentrationScore);
     }
 }
