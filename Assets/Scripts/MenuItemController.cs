@@ -27,7 +27,7 @@ public class MenuItemController : MonoBehaviour
             this.gameObject.transform.localScale = new Vector3(this.gameObject.transform.localScale.x - Time.deltaTime * 10, 150, this.gameObject.transform.localScale.z - Time.deltaTime * 5);
         }
 
-        if (this.gameObject.transform.localScale.x > 170)
+        if (this.gameObject.transform.localScale.x > 165)
         {
             this.StartPuzzle();
         }
