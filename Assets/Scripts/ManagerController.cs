@@ -17,12 +17,20 @@ public class ManagerController : MonoBehaviour
     public Text peripheralText;
     public Text rapidText;
     public Text concentrationText;
+    LogInScript loginScript;
 
     void Start()
     {
         this.puzzles = new List<GameObject>();
+        loginScript = gameObject.GetComponent<LogInScript>();
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            loginScript.SaveNewData();
+        }  
+    }
     public void BackToMenu()
     {
         /*foreach (GameObject puzzle in this.puzzles)
@@ -31,8 +39,22 @@ public class ManagerController : MonoBehaviour
         }*/
 
         Destroy(this._currentPuzzle);
-
         menu.gameObject.SetActive(true);      
+    }
+
+    public void LoadHS()
+    {
+        concentrationHS=loginScript.playerData.concentrationHS;
+        concentrationText.text = concentrationHS.ToString("F1") + "/10";
+        logicalHS = loginScript.playerData.logicHS;
+        logicText.text = logicalHS.ToString("F1") + "/10";
+        preciseHS = loginScript.playerData.precisionHS;
+        preciseText.text = preciseHS.ToString("F1") + "/10";
+        rapidHS = loginScript.playerData.rapidHS;
+        rapidText.text = rapidHS.ToString("F1") + "/10";
+        peripheralHS = loginScript.playerData.peripheralHS;
+        peripheralText.text = peripheralHS.ToString("F1") + "/10";
+
     }
 
     public void StartPuzzle(GameObject puzzle)
@@ -47,8 +69,10 @@ public class ManagerController : MonoBehaviour
         if (logical > logicalHS)
         {
             logicalHS = logical;
-            logicText.text = "Logic Eye Movement: " + logical.ToString("F2") + "/10";
+            logicText.text =logical.ToString("F1") + "/10";
+            loginScript.SaveNewData();
         }
+   
         //    return "New Highscore: " + logicalHS + " !!!";
         //}
         //else
@@ -62,8 +86,10 @@ public class ManagerController : MonoBehaviour
         if (peripheral > peripheralHS)
         {
             peripheralHS = peripheral;
-            peripheralText.text = "Peripheral Sight: " + peripheral.ToString("F2") + "/10";
+            peripheralText.text = peripheral.ToString("F1") + "/10";
+            loginScript.SaveNewData();
         }
+     
         //    return "New Highscore: " + peripheralHS + " !!!";
         //}
         //else
@@ -77,9 +103,10 @@ public class ManagerController : MonoBehaviour
         {
 
             preciseHS = precise;
-            preciseText.text = "Precise Eye Movement: " + precise.ToString("F2") + "/10 ";
+            preciseText.text = precise.ToString("F1") + "/10 ";
+            loginScript.SaveNewData();
         }
-        //    return "New Highscore: " + preciseHS + " !!!";
+       //    return "New Highscore: " + preciseHS + " !!!";
         //}
         //else
         //{
@@ -91,8 +118,10 @@ public class ManagerController : MonoBehaviour
         if (concentration > concentrationHS)
         {
             concentrationHS = concentration;
-            concentrationText.text = "Eye Concentration: " + concentration.ToString("F2") + "/10";
+            concentrationText.text = concentration.ToString("F1") + "/10";
+            loginScript.SaveNewData();
         }
+ 
         //    return "New Highscore: " + concentrationHS + " !!!";
         //}
         //else
@@ -105,8 +134,10 @@ public class ManagerController : MonoBehaviour
         if (rapid > rapidHS)
         {
             rapidHS = rapid;
-            rapidText.text = "Rapid Eye Movement: " + rapid.ToString("F2") + "/10";
+            rapidText.text = rapid.ToString("F1") + "/10";
+            loginScript.SaveNewData();
         }
+
         //    return "New Highscore: "+ rapidHS +" !!!";
         //}
         //else

@@ -17,6 +17,7 @@ public class DestroyAllColorChange : MonoBehaviour {
 
     void Start()
     {
+        Reset();
         this.manager = GameObject.Find("Manager");
     }
 
@@ -37,6 +38,10 @@ public class DestroyAllColorChange : MonoBehaviour {
         getAllChildren();
         
 	}
+    private void Reset()
+    {
+        
+    }
     public List<bool> getAllChildren()
     {
         List<bool> allDestroy = new List<bool>();
@@ -80,8 +85,20 @@ public class DestroyAllColorChange : MonoBehaviour {
         }
         else
         {
+            if(scoreScript.getScore() < 0)
+            {
+                rapidText.text = "Rapid Eye Movement skills: 0/10";
+                manager.GetComponent<ManagerController>().getRapid(scoreScript.getScore());
+                return;
+            }
             rapidText.text = "Rapid Eye Movement skills: " + scoreScript.getScore().ToString("F1") + "/10";
             manager.GetComponent<ManagerController>().getRapid(scoreScript.getScore());
+        }
+        if(concentrationScore < 0)
+        {
+            concentrationText.text = "Eye Concentration skills: 0/10";
+            manager.GetComponent<ManagerController>().getConcentration(concentrationScore);
+            return;
         }
         concentrationText.text = "Eye Concentration skills: "+ concentrationScore.ToString("F1") +"/10";
         manager.GetComponent<ManagerController>().getConcentration(concentrationScore);

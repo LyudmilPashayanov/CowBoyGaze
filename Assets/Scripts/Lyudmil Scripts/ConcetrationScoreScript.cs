@@ -19,8 +19,12 @@ public class ConcetrationScoreScript : MonoBehaviour {
     void Start()
     {
         this.manager = GameObject.Find("Manager");
+        Reset();
     }
-
+    private void Reset()
+    {
+        
+    }
     void Update () {
 
         if (canvas.activeSelf == false)
@@ -39,8 +43,15 @@ public class ConcetrationScoreScript : MonoBehaviour {
                 
                 once = false;
                 float temp = getConcentrationScore();
-                manager.GetComponent<ManagerController>().getConcentration(temp);
+                
+                if (temp < 0)
+                {
+                    concentrationText.text = "Eye Concentration: 0/10";
+                    manager.GetComponent<ManagerController>().getConcentration(temp);
+                    return;
+                }
                 concentrationText.text = "Eye Concentration: " + temp.ToString("F2") + "/10";
+                manager.GetComponent<ManagerController>().getConcentration(temp);
             }
             
         }

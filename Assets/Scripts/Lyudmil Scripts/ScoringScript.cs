@@ -7,7 +7,6 @@ public class ScoringScript : MonoBehaviour {
     public bool CipherActive = false;
     public bool MovingGameActive = false;
     public bool ChangeColorActive = false;
-
     public static float peripheralScore = 10;
     public static float logicalScore = 10;
     public static float rapidMovementScore = 10;

@@ -68,6 +68,7 @@ public class CipherScript : MonoBehaviour
         _gazeAware = GetComponent<GazeAware>();
         Randomize();
         this.manager = GameObject.Find("Manager");
+        Reset();
     }
     public void Randomize()
     {
@@ -201,11 +202,27 @@ public class CipherScript : MonoBehaviour
             resultPanel.SetActive(true);
             gameObject.GetComponent<BoxCollider>().enabled = false;
             float tempPeripheral = getPeripheralScore();
+            if(tempPeripheral < 0)
+            {
+                peripheralText.text = "Peripheral sight skills: 0/10";
+                manager.GetComponent<ManagerController>().getPeripheral(tempPeripheral);
+                return;
+            }
             peripheralText.text = "Peripheral sight skills: " + tempPeripheral.ToString("F1") + "/10";
             manager.GetComponent<ManagerController>().getPeripheral(tempPeripheral);
+            if (getLogicalScore() < 0)
+            {
+                logicalText.text = "Logical skills: 0/10";
+                manager.GetComponent<ManagerController>().getLogical(logicalScore);
+                return;
+            }
             logicalText.text = "Logical skills: "+ getLogicalScore().ToString("F1") + "/10";
             manager.GetComponent<ManagerController>().getLogical(logicalScore);
         }
+    }
+    private void Reset()
+    {
+        
     }
     public float getPeripheralScore()
     {

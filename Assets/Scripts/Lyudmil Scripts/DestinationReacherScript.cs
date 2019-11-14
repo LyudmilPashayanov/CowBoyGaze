@@ -16,6 +16,7 @@ public class DestinationReacherScript : MonoBehaviour
 
     void Start()
     {
+        Reset();
         this.manager = GameObject.Find("Manager");
     }
 
@@ -29,12 +30,21 @@ public class DestinationReacherScript : MonoBehaviour
             }
             else
             {
+                if(script.getPreciseScore()< 0)
+                {
+                    manager.GetComponent<ManagerController>().getPrecise(script.getPreciseScore());
+                    preciseText.text = "Eye precision: 0/10";
+                    return;
+                }
                 manager.GetComponent<ManagerController>().getPrecise(script.getPreciseScore());
                 preciseText.text = "Eye precision: " + script.getPreciseScore().ToString("F1") + "/10";
             }       
         }  
     }
-   
+    private void Reset()
+    {
+        
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == activationCollider.name)
